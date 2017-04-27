@@ -2,6 +2,7 @@ package com.gcit.lms.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 import com.gcit.lms.dao.AuthorDAO;
 import com.gcit.lms.entity.Author;
@@ -18,8 +19,23 @@ public class AdminService {
 		Connection conn = null;
 
 		conn = ConnectionUtil.getConnection();
-		AuthorDAO aDAO = new AuthorDAO(conn);
-		aDAO.addAuthor(author);
+		AuthorDAO auDAO = new AuthorDAO(conn);
+		auDAO.addAuthor(author);
 		conn.commit();
+	}
+
+	/**
+	 * 
+	 * @return List of all authors stored in library database
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
+	public List<Author> getAllAtuhors() throws ClassNotFoundException, SQLException {
+		Connection conn = null;
+
+		conn = ConnectionUtil.getConnection();
+		AuthorDAO auDAO = new AuthorDAO(conn);
+
+		return (List<Author>) auDAO.readAllAuthors();
 	}
 }
