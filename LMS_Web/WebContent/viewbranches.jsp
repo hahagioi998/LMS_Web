@@ -1,12 +1,60 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="com.gcit.lms.entity.Branch"%>
+<%@page import="com.gcit.lms.entity.Book"%>
+<%@page import="com.gcit.lms.service.LibrarianService"%>
+
+
+<%
+	LibrarianService service = new LibrarianService();
+	List<Branch> branches = service.getAllBranches();
+%>
+
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<meta charset="ISO-8859-1">
+<title>LMS</title>
 </head>
 <body>
-	
+	<h1>Welcome to GCIT Library Management System.</h1>
+	<h2>Hello, Librarian!</h2>
+	<h3>List of Authors in LMS</h3>
+	<table>
+		<tr>
+			<th>Branch ID</th>
+			<th>Branch Name</th>
+			<th>Branch Address</th>
+		</tr>
+		<%
+			for (Branch br : branches) {
+		%>
+		<tr>
+			<td>
+				<%
+					out.println(br.getBranchId());
+				%>
+			</td>
+			<td>
+				<%
+					out.println(br.getBranchName());
+				%>
+			</td>
+			<td>
+				<%
+					out.println(br.getBranchAddress());
+				%>
+			</td>
+			<td>
+				<%
+				%>
+			</td>
+		</tr>
+		<%
+			}
+		%>
+	</table>
+
 </body>
 </html>
