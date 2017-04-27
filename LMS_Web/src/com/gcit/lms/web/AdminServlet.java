@@ -50,7 +50,7 @@ public class AdminServlet extends HttpServlet {
 		AdminService service = new AdminService();
 		try {
 			service.addAuthor(author);
-		} catch (SQLException | ClassNotFoundException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 

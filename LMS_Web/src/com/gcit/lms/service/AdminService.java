@@ -17,13 +17,21 @@ public class AdminService {
 	 * @param author
 	 * @throws ClassNotFoundException
 	 */
-	public void addAuthor(Author author) throws SQLException, ClassNotFoundException {
+	public void addAuthor(Author author) throws SQLException {
 		Connection conn = null;
 
-		conn = ConnectionUtil.getConnection();
-		AuthorDAO auDAO = new AuthorDAO(conn);
-		auDAO.addAuthor(author);
-		conn.commit();
+		try {
+			conn = ConnectionUtil.getConnection();
+			AuthorDAO auDAO = new AuthorDAO(conn);
+			auDAO.addAuthor(author);
+			conn.commit();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			conn.rollback();
+		} finally {
+			if (conn != null)
+				conn.close();
+		}
 	}
 
 	/**
