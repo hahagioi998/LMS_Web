@@ -2,6 +2,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="com.gcit.lms.entity.Author"%>
+<%@page import="com.gcit.lms.entity.Book"%>
 <%@page import="com.gcit.lms.service.AdminService"%>
 
 
@@ -23,6 +24,7 @@
 		<tr>
 			<th>Author ID</th>
 			<th>Author Name</th>
+			<th>Book(s)</th>
 		</tr>
 		<%
 			for (Author a : authors) {
@@ -33,7 +35,21 @@
 					out.println(a.getAuthorId());
 				%>
 			</td>
-			<td><%=a.getAuthorName()%></td>
+			<td>
+				<%
+					out.println(a.getAuthorName());
+				%>
+			</td>
+			<td>
+				<%
+					List<Book> books = a.getBooks();
+						if (books != null) {
+							for (Book b : books) {
+								out.print("\t" + b.getTitle());
+							}
+						}
+				%>
+			</td>
 		</tr>
 		<%
 			}

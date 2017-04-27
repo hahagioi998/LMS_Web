@@ -43,7 +43,7 @@ public class AdminServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		System.out.printf("doPost(): Adding author name %s to database.\n", request.getParameter("authorName"));
+		System.out.printf("doPost(): Adding author name '%s' to database.\n", request.getParameter("authorName"));
 
 		Author author = new Author();
 		author.setAuthorName(request.getParameter("authorName"));

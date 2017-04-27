@@ -30,12 +30,20 @@ public class AdminService {
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 */
-	public List<Author> getAllAtuhors() throws ClassNotFoundException, SQLException {
+	public List<Author> getAllAtuhors() throws SQLException {
 		Connection conn = null;
 
-		conn = ConnectionUtil.getConnection();
-		AuthorDAO auDAO = new AuthorDAO(conn);
+		try {
+			conn = ConnectionUtil.getConnection();
+			AuthorDAO auDAO = new AuthorDAO(conn);
+			return (List<Author>) auDAO.readAllAuthors();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			if (conn != null)
+				conn.close();
+		}
 
-		return (List<Author>) auDAO.readAllAuthors();
+		return null;
 	}
 }

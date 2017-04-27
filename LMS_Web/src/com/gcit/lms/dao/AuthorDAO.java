@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.gcit.lms.entity.Author;
+import com.gcit.lms.entity.Book;
 
 public class AuthorDAO extends BaseDAO {
 	public AuthorDAO(Connection conn) {
@@ -27,15 +28,26 @@ public class AuthorDAO extends BaseDAO {
 		return (List<Author>) read("select * from tbl_author", null);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Author> extractData(ResultSet rs) throws SQLException {
 		List<Author> authors = new ArrayList<>();
+		BookDAO bDAO = new BookDAO(conn);
 		while (rs.next()) {
 			Author au = new Author();
 			au.setAuthorId(rs.getInt("authorId"));
 			au.setAuthorName(rs.getString("authorName"));
+			au.setBooks((List<Book>) bDAO.readFirstLevel(
+					"select * from tbl_book where bookId IN (select bookId from tbl_book_authors where authorId = ?)",
+					new Object[] { au.getAuthorId() }));
 			authors.add(au);
 		}
 		return authors;
+	}
+
+	@Override
+	public List<Author> extractDataFirstLevel(ResultSet rs) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
