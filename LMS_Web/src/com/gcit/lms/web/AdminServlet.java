@@ -42,13 +42,15 @@ public class AdminServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
+		System.out.printf("doPost(): Adding author name %s to database.\n", request.getParameter("authorName"));
+
 		Author author = new Author();
 		author.setAuthorName(request.getParameter("authorName"));
 		AdminService service = new AdminService();
 		try {
 			service.addAuthor(author);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 
