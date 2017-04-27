@@ -47,7 +47,13 @@ public class AuthorDAO extends BaseDAO {
 
 	@Override
 	public List<Author> extractDataFirstLevel(ResultSet rs) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Author> authors = new ArrayList<>();
+		while (rs.next()) {
+			Author au = new Author();
+			au.setAuthorId(rs.getInt("authorId"));
+			au.setAuthorName(rs.getString("authorName"));
+			authors.add(au);
+		}
+		return authors;
 	}
 }

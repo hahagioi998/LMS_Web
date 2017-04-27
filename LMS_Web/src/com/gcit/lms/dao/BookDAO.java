@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gcit.lms.entity.Author;
 import com.gcit.lms.entity.Book;
 
 public class BookDAO extends BaseDAO {
@@ -13,10 +14,26 @@ public class BookDAO extends BaseDAO {
 		super(conn);
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Book> readAllBooks() throws SQLException {
+		return (List<Book>) read("select * from tbl_book", null);
+	}
+
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Book> extractData(ResultSet rs) throws SQLException {
-		// List<Book> books = new ArrayList<>();
-		return null;
+		List<Book> books = new ArrayList<>();
+		AuthorDAO auDAO = new AuthorDAO(conn);
+		while (rs.next()) {
+			Book b = new Book();
+			b.setTitle(rs.getString("title"));
+			b.setBookId(rs.getInt("bookId"));
+			b.setAuthors((List<Author>) auDAO.readFirstLevel(
+					"select * from tbl_author where authorId IN (Select authorId from tbl_book_authors where bookId = ?)",
+					new Object[] { b.getBookId() }));
+			books.add(b);
+		}
+		return books;
 	}
 
 	@Override
