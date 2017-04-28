@@ -1,9 +1,12 @@
 package com.gcit.lms.entity;
 
+import java.util.HashMap;
+
 public class Branch {
 	private Integer branchId;
 	private String branchName;
 	private String branchAddress;
+	private HashMap<Book, Integer> branchBookCopies;
 
 	/**
 	 * @return the branchId
@@ -48,6 +51,43 @@ public class Branch {
 	 */
 	public void setBranchAddress(String branchAddress) {
 		this.branchAddress = branchAddress;
+	}
+
+	/**
+	 * @return the bookCopies
+	 */
+	public HashMap<Book, Integer> getBranchBookCopies() {
+		if (this.branchBookCopies == null) {
+			branchBookCopies = new HashMap<Book, Integer>();
+			return branchBookCopies;
+		}
+		return branchBookCopies;
+	}
+
+	/**
+	 * @param bookCopies
+	 *            the bookCopies to set
+	 */
+	public void setBranchBookCopies(HashMap<Book, Integer> bookCopies) {
+		this.branchBookCopies = bookCopies;
+	}
+
+	/**
+	 * 
+	 * @param bk
+	 * @param copies
+	 */
+	public void addBranchBookCopies(Book bk, Integer copies) {
+		this.getBranchBookCopies().put(bk, copies);
+	}
+
+	/**
+	 * 
+	 * @param bk
+	 * @param copies
+	 */
+	public void updateBranchBookCopies(Book bk, Integer copies) {
+		this.getBranchBookCopies().put(bk, copies);
 	}
 
 	/*

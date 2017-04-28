@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gcit.lms.entity.Book;
 import com.gcit.lms.entity.Branch;
 
 public class BranchDAO extends BaseDAO {
@@ -17,16 +18,40 @@ public class BranchDAO extends BaseDAO {
 		save("insert into tbl_library_branch (branchName, branchAddress) values (?, ?)",
 				new Object[] { branch.getBranchName(), branch.getBranchAddress() });
 	}
-	
 
 	@SuppressWarnings("unchecked")
 	public List<Branch> readAllBranches() throws SQLException {
-		return (List<Branch>) read("select * from tbl_library_branch", null);
+		return (List<Branch>) readFirstLevel("select * from tbl_library_branch", null);
+	}
+
+	public List<Book> listAllBooksFromBranch() {
+		return null;
 	}
 
 	@Override
 	public List<Branch> extractData(ResultSet rs) throws SQLException {
 		List<Branch> branches = new ArrayList<>();
+		BookDAO bkDAO = new BookDAO(conn);
+		while (rs.next()) {
+			Branch br = new Branch();
+			br.setBranchId(rs.getInt("branchId"));
+			br.setBranchName(rs.getString("branchName"));
+			br.setBranchAddress(rs.getString("branchAddress"));
+			List<Book> booksAtThisBranch = bkDAO.getBooksAtBranch(br.getBranchId());
+
+			for (Book bk : booksAtThisBranch) {
+				Integer copies = bkDAO.getNumOfCopiesAtBranch(br.getBranchId(), bk.getBookId());
+				br.addBranchBookCopies(bk, copies);
+			}
+			branches.add(br);
+		}
+		return branches;
+	}
+
+	@Override
+	public List<Branch> extractDataFirstLevel(ResultSet rs) throws SQLException {
+		List<Branch> branches = new ArrayList<>();
+
 		while (rs.next()) {
 			Branch br = new Branch();
 			br.setBranchId(rs.getInt("branchId"));
@@ -35,11 +60,6 @@ public class BranchDAO extends BaseDAO {
 			branches.add(br);
 		}
 		return branches;
-	}
-
-	@Override
-	public List<Branch> extractDataFirstLevel(ResultSet rs) throws SQLException {
-		return null;
 	}
 
 }

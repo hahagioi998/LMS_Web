@@ -1,6 +1,7 @@
 package com.gcit.lms.dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,6 +18,26 @@ public class BookDAO extends BaseDAO {
 	@SuppressWarnings("unchecked")
 	public List<Book> readAllBooks() throws SQLException {
 		return (List<Book>) read("select * from tbl_book", null);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Book> getBooksAtBranch(Integer branchId) throws SQLException {
+		return (List<Book>) read(
+				"select * from tbl_book where bookid IN (Select bookid from tbl_book_copies where branchId = ?)",
+				new Object[] { branchId });
+	}
+
+	public Integer getNumOfCopiesAtBranch(Integer branchId, Integer bookId) throws SQLException {
+
+		String query = "select * from tbl_book_copies where branchId = ? AND bookid = ?";
+		PreparedStatement pstmt = conn.prepareStatement(query);
+		pstmt.setInt(1, branchId);
+		pstmt.setInt(2, bookId);
+		ResultSet rs = pstmt.executeQuery();
+		if (rs.next())
+			return rs.getInt("noOfCopies");
+
+		return -1;
 	}
 
 	@SuppressWarnings("unchecked")

@@ -46,10 +46,6 @@
 					out.println(br.getBranchAddress());
 				%>
 			</td>
-			<td>
-				<%
-				%>
-			</td>
 		</tr>
 		<%
 			}
