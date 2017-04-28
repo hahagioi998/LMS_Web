@@ -8,8 +8,10 @@ import java.util.List;
 
 public abstract class BaseDAO {
 	public Connection conn = null;
+	
 	// for pagination
 	private Integer pageNo;
+	@SuppressWarnings("unused")
 	private Integer pageSize = 10;
 
 	public BaseDAO(Connection conn) {
