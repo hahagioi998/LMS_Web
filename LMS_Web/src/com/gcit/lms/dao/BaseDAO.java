@@ -8,9 +8,20 @@ import java.util.List;
 
 public abstract class BaseDAO {
 	public Connection conn = null;
+	// for pagination
+	private Integer pageNo;
+	private Integer pageSize = 10;
 
 	public BaseDAO(Connection conn) {
 		this.conn = conn;
+	}
+
+	public Integer getPageNo() {
+		return pageNo;
+	}
+
+	public void setPageNo(Integer pageNo) {
+		this.pageNo = pageNo;
 	}
 
 	/**
@@ -85,6 +96,22 @@ public abstract class BaseDAO {
 
 		ResultSet rs = pstmt.executeQuery();
 		return extractDataFirstLevel(rs);
+	}
+
+	public Integer readCount(String query, Object[] vals) throws ClassNotFoundException, SQLException {
+		PreparedStatement pstmt = conn.prepareStatement(query);
+		if (vals != null) {
+			int count = 1;
+			for (Object obj : vals) {
+				pstmt.setObject(count, obj);
+				count++;
+			}
+		}
+		ResultSet rs = pstmt.executeQuery();
+		if (rs.next()) {
+			return rs.getInt("COUNT");
+		}
+		return null;
 	}
 
 	public abstract List<?> extractData(ResultSet rs) throws SQLException;

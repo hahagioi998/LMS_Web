@@ -56,6 +56,22 @@ public class AdminService {
 		return null;
 	}
 
+	public List<Author> getAllAuthors(Integer pageNo) throws SQLException {
+		Connection conn = null;
+		try {
+			conn = ConnectionUtil.getConnection();
+			AuthorDAO aDAO = new AuthorDAO(conn);
+			return aDAO.readAllAuthors(pageNo);
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (conn != null) {
+				conn.close();
+			}
+		}
+		return null;
+	}
+
 	/**
 	 * 
 	 * @return List of all books stored in library database
@@ -77,4 +93,37 @@ public class AdminService {
 
 		return null;
 	}
+
+	public Integer getAuthorsCount() throws SQLException {
+		Connection conn = null;
+		try {
+			conn = ConnectionUtil.getConnection();
+			AuthorDAO aDAO = new AuthorDAO(conn);
+			return aDAO.getAuthorsCount();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (conn != null) {
+				conn.close();
+			}
+		}
+		return null;
+	}
+
+	public Author getAuthorByPk(Integer authorId) throws SQLException {
+		Connection conn = null;
+		try {
+			conn = ConnectionUtil.getConnection();
+			AuthorDAO adao = new AuthorDAO(conn);
+			return adao.readAuthorByID(authorId);
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (conn != null) {
+				conn.close();
+			}
+		}
+		return null;
+	}
+
 }

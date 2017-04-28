@@ -23,9 +23,29 @@ public class AuthorDAO extends BaseDAO {
 				new Object[] { author.getAuthorName(), author.getAuthorId() });
 	}
 
+	public Integer getAuthorsCount() throws ClassNotFoundException, SQLException {
+		return readCount("select count(*) as COUNT from tbl_author", null);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Author> readAllAuthors(Integer pageNo) throws ClassNotFoundException, SQLException {
+		setPageNo(pageNo);
+		return (List<Author>) read("select * from tbl_author", null);
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<Author> readAllAuthors() throws SQLException {
 		return (List<Author>) read("select * from tbl_author", null);
+	}
+
+	@SuppressWarnings("unchecked")
+	public Author readAuthorByID(Integer authorID) throws ClassNotFoundException, SQLException {
+		List<Author> authors = (List<Author>) read("select * from tbl_author where authorId = ?",
+				new Object[] { authorID });
+		if (authors != null && !authors.isEmpty()) {
+			return authors.get(0);
+		}
+		return null;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -56,4 +76,5 @@ public class AuthorDAO extends BaseDAO {
 		}
 		return authors;
 	}
+
 }
